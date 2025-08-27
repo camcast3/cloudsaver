@@ -529,7 +529,7 @@ detect_emulator_path() {
     
     # Check alternative paths
     if [ -n "${EMULATOR_ALT_PATHS[$emulator]:-}" ]; then
-        IFS=':' read -ra alt_paths <<< "${EMULATOR_ALT_PATHS[$emulator]}"
+        IFS=' ' read -ra alt_paths <<< "${EMULATOR_ALT_PATHS[$emulator]}"
         for alt_path in "${alt_paths[@]}"; do
             if [ -d "$alt_path" ]; then
                 echo "$alt_path"
