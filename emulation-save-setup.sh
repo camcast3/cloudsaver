@@ -5,7 +5,7 @@
 # Supports EmuDeck, RetroPie, Batocera, EmulationStation, and custom setups
 
 SCRIPT_DIR="$(dirname "$0")"
-readonly VERSION="1.1.0"
+readonly VERSION="1.1.1"
 SYNC_SCRIPT="$SCRIPT_DIR/emulation-save-sync.sh"
 CONFIG_DIR="$HOME/.config/emulation-save-sync"
 

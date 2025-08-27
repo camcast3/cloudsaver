@@ -5,7 +5,7 @@
 # Usage: emulation-save-wrapper.sh [emulator_name] [emulator_command] [args...]
 
 SYNC_SCRIPT_DIR="$(dirname "$0")"
-readonly VERSION="1.1.0"
+readonly VERSION="1.1.1"
 SYNC_SCRIPT="$SYNC_SCRIPT_DIR/emulation-save-sync.sh"
 LOG_DIR="$HOME/.config/emulation-save-sync/logs"
 WRAPPER_LOG="$LOG_DIR/wrapper.log"

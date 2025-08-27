@@ -113,9 +113,44 @@ else
     check_status "EmuDeck/Emulator installation not clearly detected" "WARNING"
 fi
 
-# Check for common emulator save paths
+# Check for installed emulator Flatpaks
 echo
-echo "Emulator Save Paths:"
+echo "Installed Emulator Flatpaks:"
+emulator_installed_count=0
+
+declare -A flatpaks=(
+    ["RetroArch"]="org.libretro.RetroArch"
+    ["Dolphin"]="org.DolphinEmu.dolphin-emu"
+    ["PCSX2"]="net.pcsx2.PCSX2"
+    ["PPSSPP"]="org.ppsspp.PPSSPP"
+    ["Citra"]="org.citra_emu.citra"
+    ["DuckStation"]="org.duckstation.DuckStation"
+    ["RPCS3"]="net.rpcs3.RPCS3"
+    ["Cemu"]="info.cemu.Cemu"
+    ["Ryujinx"]="org.ryujinx.Ryujinx"
+    ["Yuzu"]="org.yuzu_emu.yuzu"
+    ["melonDS"]="net.kuribo64.melonDS"
+    ["Xemu"]="app.xemu.xemu"
+    ["PrimeHack"]="io.github.shiiion.primehack"
+)
+
+for emulator in "${!flatpaks[@]}"; do
+    flatpak_id="${flatpaks[$emulator]}"
+    if [ -d "$HOME/.var/app/$flatpak_id" ]; then
+        check_status "$emulator Flatpak installed ($flatpak_id)" "OK"
+        ((emulator_installed_count++))
+    fi
+done
+
+if [ $emulator_installed_count -gt 0 ]; then
+    echo -e "${GREEN}✅${NC} $emulator_installed_count emulator(s) installed via Flatpak"
+else
+    echo -e "${YELLOW}⚠️${NC} No emulator Flatpaks detected - may need to install emulators first"
+fi
+
+# Check for common emulator save paths (only exist after running emulators)
+echo
+echo "Emulator Save Directories (created after first run):"
 emulator_count=0
 
 # RetroArch (Steam/Proton path)
@@ -158,9 +193,11 @@ done
 
 echo
 if [ $emulator_count -gt 0 ]; then
-    check_status "$emulator_count emulator(s) with potential save data detected" "OK"
+    check_status "$emulator_count emulator(s) with existing save data detected" "OK"
 else
-    check_status "No emulator save directories found (emulators may not have been run yet)" "WARNING"
+    check_status "No emulator save directories found yet" "WARNING"
+    echo -e "${YELLOW}   This is normal if you haven't run the emulators yet.${NC}"
+    echo -e "${YELLOW}   Save directories are created when you first launch each emulator.${NC}"
 fi
 
 echo
