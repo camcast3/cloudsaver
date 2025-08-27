@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# EmuDeck Save Sync Setup Script
-# Helps configure rclone with Nextcloud for EmuDeck save syncing
+# Universal Emulation Save Sync Setup Script
+# Helps configure rclone with cloud storage for emulation save syncing
+# Supports EmuDeck, RetroPie, Batocera, EmulationStation, and custom setups
 
 SCRIPT_DIR="$(dirname "$0")"
-SYNC_SCRIPT="$SCRIPT_DIR/emudeck-sync.sh"
-CONFIG_DIR="$HOME/.config/emudeck-sync"
+readonly VERSION="1.1.0"
+SYNC_SCRIPT="$SCRIPT_DIR/emulation-save-sync.sh"
+CONFIG_DIR="$HOME/.config/emulation-save-sync"
 
 # Color codes
 RED='\033[0;31m'
@@ -17,18 +19,73 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m'
 
-echo -e "${BLUE}================================${NC}"
-echo -e "${WHITE}  EmuDeck Save Sync Setup${NC}"
-echo -e "${BLUE}================================${NC}"
+echo -e "${BLUE}=========================================${NC}"
+echo -e "${WHITE}  Universal Emulation Save Sync Setup v$VERSION${NC}"
+echo -e "${BLUE}=========================================${NC}"
 echo ""
+
+# Function to report Bazzite incidents
+report_bazzite_incident() {
+    local issue_type="$1"
+    local details="$2"
+    
+    echo -e "${RED}🚨 BAZZITE SYSTEM INCIDENT DETECTED${NC}"
+    echo -e "${YELLOW}Issue: $issue_type${NC}"
+    echo -e "${YELLOW}Details: $details${NC}"
+    echo ""
+    echo -e "${WHITE}This appears to be a Bazzite system configuration issue.${NC}"
+    echo -e "${WHITE}Please report this to Bazzite support:${NC}"
+    echo ""
+    echo -e "${CYAN}1. GitHub Issues: https://github.com/ublue-os/bazzite/issues${NC}"
+    echo -e "${CYAN}2. Discord: https://discord.gg/f8MUghG5PB${NC}"
+    echo -e "${CYAN}3. Forum: https://universal-blue.discourse.group/${NC}"
+    echo ""
+    echo -e "${WHITE}Include this information in your report:${NC}"
+    echo -e "${WHITE}----------------------------------------${NC}"
+    echo "System: $(cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2)"
+    echo "Kernel: $(uname -r)"
+    echo "Hostname: $(hostname)"
+    echo "Issue: $issue_type"
+    echo "Details: $details"
+    echo "Expected: $issue_type should be available by default on Bazzite"
+    echo "PATH: $PATH"
+    echo -e "${WHITE}----------------------------------------${NC}"
+    echo ""
+}
 
 # Check if rclone is installed
 if ! command -v rclone >/dev/null 2>&1; then
     echo -e "${YELLOW}rclone is not installed. Attempting automatic installation...${NC}"
     echo ""
     
-    # Try to install rclone automatically
-    if command -v apt >/dev/null 2>&1; then
+    # Check if we're on Bazzite (immutable Fedora-based OS)
+    if grep -q "bazzite" /etc/os-release 2>/dev/null || hostname | grep -q "bazzite"; then
+        echo -e "${CYAN}Detected Bazzite system.${NC}"
+        
+        # Homebrew should be available by default on Bazzite
+        if command -v brew >/dev/null 2>&1; then
+            echo -e "${GREEN}✅ Homebrew found (as expected on Bazzite)${NC}"
+            echo -e "${CYAN}Installing rclone using Homebrew...${NC}"
+            brew install rclone
+        else
+            # This is unexpected on Bazzite - report incident
+            report_bazzite_incident "Homebrew Missing" "Homebrew not found in PATH, but should be available by default on Bazzite"
+            
+            echo -e "${YELLOW}Attempting fallback installation methods...${NC}"
+            
+            # Try Flatpak as backup
+            if command -v flatpak >/dev/null 2>&1; then
+                echo -e "${CYAN}Using Flatpak as fallback...${NC}"
+                flatpak install -y flathub org.rclone.rclone
+                echo -e "${YELLOW}Note: You may need to use 'flatpak run org.rclone.rclone' instead of 'rclone'${NC}"
+            else
+                echo -e "${RED}❌ No suitable installation method found${NC}"
+                echo -e "${YELLOW}Manual installation required. Please install Homebrew or use Flatpak.${NC}"
+                exit 1
+            fi
+        fi
+    # Try standard package managers for other distros
+    elif command -v apt >/dev/null 2>&1; then
         echo -e "${CYAN}Installing rclone using apt...${NC}"
         sudo apt update && sudo apt install -y rclone
     elif command -v yum >/dev/null 2>&1; then

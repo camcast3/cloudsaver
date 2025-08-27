@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# EmuDeck Save Sync Wrapper
+# Universal Emulation Save Sync Wrapper
 # Automatically syncs saves before and after emulator execution
-# Usage: emudeck-wrapper.sh [emulator_name] [emulator_command] [args...]
+# Usage: emulation-save-wrapper.sh [emulator_name] [emulator_command] [args...]
 
 SYNC_SCRIPT_DIR="$(dirname "$0")"
-SYNC_SCRIPT="$SYNC_SCRIPT_DIR/emudeck-sync.sh"
-LOG_DIR="$HOME/.config/emudeck-sync/logs"
+readonly VERSION="1.1.0"
+SYNC_SCRIPT="$SYNC_SCRIPT_DIR/emulation-save-sync.sh"
+LOG_DIR="$HOME/.config/emulation-save-sync/logs"
 WRAPPER_LOG="$LOG_DIR/wrapper.log"
 
 # Color codes
@@ -41,7 +42,7 @@ log_wrapper() {
 # Show usage
 show_usage() {
     cat << EOF
-EmuDeck Save Sync Wrapper
+EmuDeck Save Sync Wrapper v$VERSION
 
 This script wraps emulator execution with automatic save syncing.
 

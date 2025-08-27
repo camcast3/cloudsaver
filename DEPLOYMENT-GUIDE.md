@@ -1,4 +1,6 @@
-# EmuDeck Save Sync - Deployment Guide for Bazzite/SteamOS
+# EmuDeck Save Sync - Deployment Guide for Bazzite/SteamOS v1.1.0
+
+This guide covers deployment of EmuDeck Save Sync v1.1.0, which includes enhanced Bazzite support and complete coverage of all major emulators.
 
 ## 🎯 Pre-Deployment Checklist
 
@@ -8,7 +10,10 @@
 - [ ] Verify README and documentation is up to date
 
 ### 2. Bazzite Machine Preparation
-- [ ] Ensure rclone is available (`flatpak install flathub org.rclone.rclone` or use auto-install)
+- [ ] Verify Homebrew is available (should be default on Bazzite):
+  - **Expected**: `brew --version` should work
+  - **If missing**: Report incident to Bazzite support (unexpected)
+  - **Fallback**: Use Flatpak (`flatpak install flathub org.rclone.rclone`)
 - [ ] Check if EmuDeck is installed and configured
 - [ ] Verify network connectivity to your Nextcloud instance
 - [ ] Have your Nextcloud credentials ready
@@ -18,7 +23,7 @@
 ### Step 1: Clone and Setup
 ```bash
 # Clone the repository
-git clone https://github.com/camcast3/homelab.git
+git clone https://github.com/camcast3/homelab.git || { echo "Repository already cloned or error occurred"; }
 cd homelab
 
 # Make scripts executable
@@ -60,17 +65,162 @@ chmod +x *.sh
    cp -r ~/.var/app/*/config/*/saves ~/emudeck-backup/ 2>/dev/null || true
    ```
 
-2. **Test with a single emulator** (recommend RetroArch first):
+2. **Check which emulators are actually installed**:
    ```bash
-   # Check if RetroArch saves exist
-   ls ~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/compatdata/1118310/pfx/drive_c/users/steamuser/AppData/Roaming/RetroArch/saves/
+   # Check installed emulator Flatpaks
+   flatpak list --columns=application | grep -E "(dolphin|pcsx2|ppsspp|citra|duckstation|retroarch|rpcs3|cemu|ryujinx|yuzu|melonds|xemu|primehack)"
+   
+   # Check for emulator save directories
+   ls ~/.var/app/ | grep -E "(org.libretro.RetroArch|org.DolphinEmu.dolphin-emu|net.pcsx2.PCSX2|org.ppsspp.PPSSPP|org.duckstation.DuckStation|net.rpcs3.RPCS3|info.cemu.Cemu|org.ryujinx.Ryujinx|org.yuzu_emu.yuzu|org.citra_emu.citra|net.kuribo64.melonDS|app.xemu.xemu|io.github.shiiion.primehack)"
+   
+   # Check what the sync script detects
+   ./emudeck-sync.sh list
+   ```
 
-   # If saves exist, upload them
+3. **Test with your most expendable emulator first** (recommend starting with one that has saves you don't mind losing):
+   ```bash
+   # Example with RetroArch (replace with your chosen emulator)
    ./emudeck-sync.sh upload retroarch -v
-
+   
    # Verify upload worked
    ./emudeck-sync.sh status
    ```
+
+### Phase 2: Testing Each Supported Emulator
+
+Test each emulator you have installed using this pattern:
+
+#### RetroArch (Multiple Systems)
+```bash
+# Check for saves
+ls ~/.var/app/org.libretro.RetroArch/config/retroarch/saves/
+# Or Steam version:
+ls ~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/compatdata/1118310/pfx/drive_c/users/steamuser/AppData/Roaming/RetroArch/saves/
+
+# Test sync
+./emudeck-sync.sh upload retroarch -v
+./emudeck-sync.sh download retroarch -v
+```
+
+#### GameCube/Wii (Dolphin)
+```bash
+# Check for saves
+ls ~/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/
+
+# Test sync
+./emudeck-sync.sh upload dolphin -v
+./emudeck-sync.sh download dolphin -v
+```
+
+#### PlayStation 2 (PCSX2)
+```bash
+# Check for saves
+ls ~/.var/app/net.pcsx2.PCSX2/data/pcsx2/
+
+# Test sync
+./emudeck-sync.sh upload pcsx2 -v
+./emudeck-sync.sh download pcsx2 -v
+```
+
+#### PSP (PPSSPP)
+```bash
+# Check for saves
+ls ~/.var/app/org.ppsspp.PPSSPP/config/ppsspp/
+
+# Test sync
+./emudeck-sync.sh upload ppsspp -v
+./emudeck-sync.sh download ppsspp -v
+```
+
+#### PlayStation 1 (DuckStation)
+```bash
+# Check for saves
+ls ~/.var/app/org.duckstation.DuckStation/data/duckstation/
+
+# Test sync
+./emudeck-sync.sh upload duckstation -v
+./emudeck-sync.sh download duckstation -v
+```
+
+#### PlayStation 3 (RPCS3)
+```bash
+# Check for saves
+ls ~/.var/app/net.rpcs3.RPCS3/data/rpcs3/
+
+# Test sync
+./emudeck-sync.sh upload rpcs3 -v
+./emudeck-sync.sh download rpcs3 -v
+```
+
+#### Wii U (Cemu)
+```bash
+# Check for saves
+ls ~/.var/app/info.cemu.Cemu/data/cemu/
+
+# Test sync
+./emudeck-sync.sh upload cemu -v
+./emudeck-sync.sh download cemu -v
+```
+
+#### Nintendo Switch (Ryujinx)
+```bash
+# Check for saves
+ls ~/.var/app/org.ryujinx.Ryujinx/config/Ryujinx/
+
+# Test sync
+./emudeck-sync.sh upload ryujinx -v
+./emudeck-sync.sh download ryujinx -v
+```
+
+#### Nintendo Switch (Yuzu - if available)
+```bash
+# Check for saves
+ls ~/.var/app/org.yuzu_emu.yuzu/data/yuzu/
+
+# Test sync
+./emudeck-sync.sh upload yuzu -v
+./emudeck-sync.sh download yuzu -v
+```
+
+#### Nintendo 3DS (Citra)
+```bash
+# Check for saves
+ls ~/.var/app/org.citra_emu.citra/data/citra-emu/
+
+# Test sync
+./emudeck-sync.sh upload citra -v
+./emudeck-sync.sh download citra -v
+```
+
+#### Nintendo DS (melonDS)
+```bash
+# Check for saves
+ls ~/.var/app/net.kuribo64.melonDS/data/melonDS/
+
+# Test sync
+./emudeck-sync.sh upload melonds -v
+./emudeck-sync.sh download melonds -v
+```
+
+#### Original Xbox (Xemu)
+```bash
+# Check for saves
+ls ~/.var/app/app.xemu.xemu/data/xemu/
+
+# Test sync
+./emudeck-sync.sh upload xemu -v
+./emudeck-sync.sh download xemu -v
+```
+
+#### GameCube/Wii (PrimeHack)
+```bash
+# Check for saves
+ls ~/.var/app/io.github.shiiion.primehack/data/dolphin-emu/
+
+# Test sync
+./emudeck-sync.sh upload primehack -v
+./emudeck-sync.sh download primehack -v
+```
 
 ### Phase 2: Gradual Integration
 1. **Test wrapper with a quick game**:
@@ -102,8 +252,15 @@ Bazzite uses Flatpak for many emulators. The paths should be:
 - **Dolphin**: `org.DolphinEmu.dolphin-emu`
 - **PCSX2**: `net.pcsx2.PCSX2`
 - **PPSSPP**: `org.ppsspp.PPSSPP`
+- **DuckStation**: `org.duckstation.DuckStation`
+- **RPCS3**: `net.rpcs3.RPCS3`
+- **Cemu**: `info.cemu.Cemu`
+- **Ryujinx**: `org.ryujinx.Ryujinx`
+- **Yuzu**: `org.yuzu_emu.yuzu`
 - **Citra**: `org.citra_emu.citra`
-- **And others as configured by EmuDeck
+- **melonDS**: `net.kuribo64.melonDS`
+- **Xemu**: `app.xemu.xemu`
+- **PrimeHack**: `io.github.shiiion.primehack`
 
 ### Network Considerations
 - Verify your Nextcloud URL is accessible from the Bazzite machine
@@ -156,11 +313,21 @@ cat ~/.config/emudeck-sync/config.conf
 
 ### If rclone isn't found:
 ```bash
-# Install rclone via Flatpak
+# On Bazzite, Homebrew should be available by default:
+brew install rclone
+
+# If Homebrew is missing on Bazzite (unexpected - report incident):
+# Report to: https://github.com/ublue-os/bazzite/issues
+# Include: System info, PATH, expected vs actual state
+
+# Fallback: Install rclone via Flatpak
 flatpak install flathub org.rclone.rclone
 
-# Or let the script auto-install it
-./emudeck-setup.sh  # Will attempt automatic installation
+# If using Flatpak rclone, you may need to use:
+# flatpak run org.rclone.rclone instead of just 'rclone'
+
+# Or let the script auto-install (will detect and report incidents)
+./emudeck-setup.sh
 ```
 
 ### If emulator paths are different:

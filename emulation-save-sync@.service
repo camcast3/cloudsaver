@@ -1,12 +1,12 @@
 [Unit]
-Description=EmuDeck Save Sync Service
+Description=Universal Emulation Save Sync Service
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=oneshot
 User=%i
-ExecStart=/home/%i/Documents/homelab/emudeck-sync.sh upload
+ExecStart=/home/%i/Documents/homelab/emulation-save-sync.sh upload
 StandardOutput=journal
 StandardError=journal
 

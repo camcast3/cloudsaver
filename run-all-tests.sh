@@ -4,6 +4,7 @@
 # Orchestrates and runs all test suites with comprehensive reporting
 
 PROJECT_ROOT="$(dirname "$0")"
+VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "1.0.0")
 TEST_DIR="$PROJECT_ROOT/tests"
 
 # Test suite files
@@ -43,7 +44,7 @@ REPORT_FILE=""
 # Usage information
 show_usage() {
     cat << EOF
-EmuDeck Save Sync - Master Test Runner
+EmuDeck Save Sync - Master Test Runner v$VERSION
 
 Usage: $0 [OPTIONS]
 
