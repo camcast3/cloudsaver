@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Universal Emulation Save Sync periodically
+Requires=emulation-save-sync@%i.service
+
+[Timer]
+OnCalendar=*:0/30
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Steam Launch Script for EmuDeck Save Sync
+# Steam Launch Script for Universal Emulation Save Sync
 # This script can be used as a Steam launch option to automatically sync saves
-# Usage in Steam: Add this as launch option: /path/to/emudeck-steam-launch.sh %command%
+# Usage in Steam: Add this as launch option: /path/to/emulation-steam-launcher.sh %command%
 
 SCRIPT_DIR="$(dirname "$0")"
-SYNC_SCRIPT="$SCRIPT_DIR/emudeck-sync.sh"
-LOG_DIR="$HOME/.config/emudeck-sync/logs"
+SYNC_SCRIPT="$SCRIPT_DIR/emulation-save-sync.sh"
+LOG_DIR="$HOME/.config/emulation-save-sync/logs"
 
 # Create log directory
 mkdir -p "$LOG_DIR"

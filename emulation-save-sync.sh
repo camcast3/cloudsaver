@@ -1,29 +1,32 @@
 #!/bin/bash
 
-# EmuDeck Save Sync Script
-# Uses rclone to sync emulation saves with Nextcloud before and after emulator usage
-# Similar to EmuDeck's Cloud Save functionality
+# Universal Emulation Save Sync Script
+# Uses rclone to sync emulation saves with cloud storage before and after emulator usage
+# Supports EmuDeck, RetroPie, Batocera, EmulationStation, and custom emulator setups
 
 # Configuration
-SCRIPT_NAME="EmuDeck Save Sync"
+SCRIPT_NAME="Universal Emulation Save Sync"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null || echo "1.0.0")
-LOG_DIR="$HOME/.config/emudeck-sync/logs"
-CONFIG_DIR="$HOME/.config/emudeck-sync"
+VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null || echo "1.2.0")
+LOG_DIR="$HOME/.config/emulation-save-sync/logs"
+CONFIG_DIR="$HOME/.config/emulation-save-sync"
 CONFIG_FILE="$CONFIG_DIR/config.conf"
-LOCK_FILE="/tmp/emudeck-sync.lock"
+LOCK_FILE="/tmp/emulation-save-sync.lock"
 
 # Default configuration (can be overridden in config file)
 RCLONE_REMOTE="nextcloud"
-RCLONE_REMOTE_PATH="EmuDeck/saves"
+RCLONE_REMOTE_PATH="EmulationSaves"
 LOCAL_SAVES_BASE="$HOME/.var/app"
 ENABLE_LOGGING=true
 SYNC_TIMEOUT=300  # 5 minutes
 DRY_RUN=false
 VERBOSE=false
 
-# EmuDeck emulator paths (relative to $HOME/.var/app)
-# These are default paths - actual paths will be detected dynamically
+# Emulation Package Manager Detection
+EMULATION_MANAGER=""
+
+# Emulator paths by package manager
+# EmuDeck paths (relative to $HOME/.var/app)
 declare -A EMULATOR_SAVE_PATHS=(
     ["retroarch"]="com.valvesoftware.Steam/.local/share/Steam/steamapps/compatdata/1118310/pfx/drive_c/users/steamuser/AppData/Roaming/RetroArch/saves"
     ["dolphin"]="org.DolphinEmu.dolphin-emu/data/dolphin-emu"
@@ -67,6 +70,71 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
+# Detect emulation package manager
+detect_emulation_manager() {
+    # Check for EmuDeck
+    if [ -f "$HOME/.config/EmuDeck/settings.sh" ] || [ -d "$HOME/emudeck" ]; then
+        echo "emudeck"
+        return 0
+    fi
+    
+    # Check for RetroPie
+    if [ -d "/opt/retropie" ] || [ -f "/home/pi/RetroPie/retropiemenu/retropie_setup.sh" ]; then
+        echo "retropie"
+        return 0
+    fi
+    
+    # Check for Batocera
+    if [ -f "/usr/bin/batocera-info" ] || [ -f "/userdata/system/batocera.conf" ]; then
+        echo "batocera"
+        return 0
+    fi
+    
+    # Check for EmulationStation
+    if [ -d "$HOME/.emulationstation" ] || [ -f "$HOME/.emulationstation/es_systems.cfg" ]; then
+        echo "emulationstation"
+        return 0
+    fi
+    
+    # Check for Lakka
+    if [ -f "/etc/lakka-release" ]; then
+        echo "lakka"
+        return 0
+    fi
+    
+    # Default to custom/generic
+    echo "custom"
+    return 0
+}
+
+# Initialize emulation manager detection
+init_emulation_manager() {
+    EMULATION_MANAGER=$(detect_emulation_manager)
+    log "INFO" "Detected emulation manager: $EMULATION_MANAGER"
+    
+    # Set default remote path based on manager
+    case $EMULATION_MANAGER in
+        "emudeck")
+            RCLONE_REMOTE_PATH="EmuDeck/saves"
+            ;;
+        "retropie")
+            RCLONE_REMOTE_PATH="RetroPie/saves"
+            ;;
+        "batocera")
+            RCLONE_REMOTE_PATH="Batocera/saves"
+            ;;
+        "emulationstation")
+            RCLONE_REMOTE_PATH="EmulationStation/saves"
+            ;;
+        "lakka")
+            RCLONE_REMOTE_PATH="Lakka/saves"
+            ;;
+        *)
+            RCLONE_REMOTE_PATH="EmulationSaves"
+            ;;
+    esac
+}
+
 # Logging function
 log() {
     local level="$1"
@@ -74,7 +142,7 @@ log() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
     if [ "$ENABLE_LOGGING" = true ]; then
-        echo "[$timestamp] [$level] $message" >> "$LOG_DIR/emudeck-sync.log"
+        echo "[$timestamp] [$level] $message" >> "$LOG_DIR/emulation-save-sync.log"
     fi
     
     case $level in
@@ -302,6 +370,9 @@ check_dependencies() {
 
 # Create necessary directories
 create_directories() {
+    # Initialize emulation manager detection
+    init_emulation_manager
+    
     log "DEBUG" "Creating necessary directories..."
     mkdir -p "$LOG_DIR" "$CONFIG_DIR"
 }
@@ -662,7 +733,8 @@ sync_all_saves() {
 show_usage() {
     cat << EOF
 $SCRIPT_NAME v$VERSION
-Sync EmuDeck emulation saves with Nextcloud using rclone
+Universal emulation save sync with cloud storage using rclone
+Supports EmuDeck, RetroPie, Batocera, EmulationStation, and custom setups
 
 Usage: $0 [OPTIONS] COMMAND [EMULATOR]
 

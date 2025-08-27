@@ -5,14 +5,17 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null || echo "1.0.0")
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🔍 EmuDeck Save Sync - Bazzite Environment Check${NC}"
-echo "=================================================="
+echo -e "${BLUE}🔍 EmuDeck Save Sync - Bazzite Environment Check v$VERSION${NC}"
+echo "========================================================="
 
 # Function to check and report status
 check_status() {
@@ -54,7 +57,16 @@ if command -v rclone &> /dev/null; then
 elif flatpak list | grep -q rclone; then
     check_status "rclone available via Flatpak" "OK"
 else
-    check_status "rclone not found (will auto-install during setup)" "WARNING"
+    # Check if we're on Bazzite to provide appropriate guidance
+    if grep -q "bazzite" /etc/os-release 2>/dev/null || hostname | grep -q "bazzite"; then
+        if command -v brew &> /dev/null; then
+            check_status "rclone not found, but Homebrew available (run: brew install rclone)" "WARNING"
+        else
+            check_status "🚨 INCIDENT: Homebrew missing on Bazzite (should be default) - report to Bazzite support" "FAIL"
+        fi
+    else
+        check_status "rclone not found (install via package manager or Homebrew)" "WARNING"
+    fi
 fi
 
 # Check for curl
@@ -72,6 +84,21 @@ for util in mkdir cp mv rm ls chmod; do
         check_status "$util not found" "FAIL"
     fi
 done
+
+# Check for Homebrew (should be default on Bazzite)
+if grep -q "bazzite" /etc/os-release 2>/dev/null || hostname | grep -q "bazzite"; then
+    if command -v brew &> /dev/null; then
+        check_status "Homebrew available (as expected on Bazzite)" "OK"
+    else
+        check_status "🚨 INCIDENT: Homebrew missing on Bazzite - should be available by default" "FAIL"
+        echo -e "${RED}   Report to: https://github.com/ublue-os/bazzite/issues${NC}"
+    fi
+else
+    # Non-Bazzite systems
+    if command -v brew &> /dev/null; then
+        check_status "Homebrew available" "OK"
+    fi
+fi
 
 echo
 echo -e "${BLUE}3. EmuDeck Environment${NC}"
@@ -112,6 +139,13 @@ declare -A emulators=(
     ["PPSSPP"]="$HOME/.var/app/org.ppsspp.PPSSPP/config/ppsspp"
     ["Citra"]="$HOME/.var/app/org.citra_emu.citra/data/citra-emu"
     ["DuckStation"]="$HOME/.var/app/org.duckstation.DuckStation/data/duckstation"
+    ["RPCS3"]="$HOME/.var/app/net.rpcs3.RPCS3/data/rpcs3"
+    ["Cemu"]="$HOME/.var/app/info.cemu.Cemu/data/cemu"
+    ["Ryujinx"]="$HOME/.var/app/org.ryujinx.Ryujinx/config/Ryujinx"
+    ["Yuzu"]="$HOME/.var/app/org.yuzu_emu.yuzu/data/yuzu"
+    ["melonDS"]="$HOME/.var/app/net.kuribo64.melonDS/data/melonDS"
+    ["Xemu"]="$HOME/.var/app/app.xemu.xemu/data/xemu"
+    ["PrimeHack"]="$HOME/.var/app/io.github.shiiion.primehack/data/dolphin-emu"
 )
 
 for emulator in "${!emulators[@]}"; do
@@ -199,21 +233,35 @@ echo
 echo -e "${BLUE}7. Summary${NC}"
 echo "========="
 
-# Count issues
+# Count issues and provide Bazzite-specific guidance
 if command -v bash &> /dev/null && [ -f "emudeck-sync.sh" ]; then
     echo -e "${GREEN}✅ Ready for deployment!${NC}"
     echo
-    echo "Next steps:"
+    echo "Next steps for Bazzite:"
     echo "1. Run: chmod +x *.sh"
-    echo "2. Run: ./emudeck-setup.sh"
-    echo "3. Follow the Deployment Guide"
+    if ! command -v rclone &> /dev/null; then
+        echo "2. Install rclone: brew install rclone (recommended for Bazzite)"
+    fi
+    echo "3. Run: ./emudeck-setup.sh"
+    echo "4. Follow the Deployment Guide"
 else
     echo -e "${RED}❌ Some issues need to be resolved first${NC}"
     echo
-    echo "Common fixes:"
+    echo "Common fixes for Bazzite:"
     echo "1. Make sure you're in the cloned repository directory"
-    echo "2. Install missing dependencies"
+    if ! command -v rclone &> /dev/null; then
+        echo "2. Install rclone: brew install rclone (or flatpak install flathub org.rclone.rclone)"
+    fi
     echo "3. Check network connectivity"
+fi
+
+echo
+echo -e "${YELLOW}💡 Bazzite-specific tips:${NC}"
+if command -v brew &> /dev/null; then
+    echo "- ✅ Homebrew detected - use 'brew install rclone' for best results"
+else
+    echo "- Consider installing Homebrew for easier package management"
+    echo "- Alternative: Use Flatpak for rclone installation"
 fi
 
 echo
