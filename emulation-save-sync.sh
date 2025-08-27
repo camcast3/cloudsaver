@@ -7,7 +7,7 @@
 # Configuration
 SCRIPT_NAME="Universal Emulation Save Sync"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null || echo "1.2.0")
+VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null || echo "1.1.0")
 LOG_DIR="$HOME/.config/emulation-save-sync/logs"
 CONFIG_DIR="$HOME/.config/emulation-save-sync"
 CONFIG_FILE="$CONFIG_DIR/config.conf"

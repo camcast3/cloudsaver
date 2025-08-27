@@ -1,4 +1,4 @@
-# 🎮 Universal Emulation Save Sync v1.2.0
+# 🎮 Universal Emulation Save Sync v1.1.0
 
 **Automatic cloud sync for your emulation saves across all platforms**
 

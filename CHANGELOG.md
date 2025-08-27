@@ -5,7 +5,7 @@ All notable changes to the Universal Emulation Save Sync project will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2025-08-27
+## [1.1.0] - 2025-08-27
 
 ### 🎯 MAJOR UPDATE: Universal Emulation Platform Support
 
@@ -24,11 +24,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Custom/Generic emulator installations
 - 🔍 **Intelligent Platform Detection**: Automatically detects which emulation platform is installed
 - 🎯 **Platform-Specific Configuration**: Different default remote paths and behaviors per platform
-- 🔄 **Backward Compatibility**: Existing EmuDeck users can continue using old script names via symlinks
+- � **Bazzite System Support**: Enhanced detection and support for Bazzite (immutable Fedora-based OS)
+- 🍺 **Homebrew Integration**: Prioritized Homebrew for rclone installation on Bazzite systems  
+- 🎮 **Expanded Emulator Support**: Added support for 13 major emulators:
+  - RetroArch (multi-system retro gaming)
+  - Dolphin (GameCube/Wii)
+  - PCSX2 (PlayStation 2) 
+  - PPSSPP (PlayStation Portable)
+  - DuckStation (PlayStation 1)
+  - RPCS3 (PlayStation 3)
+  - Cemu (Wii U)
+  - Ryujinx (Nintendo Switch)
+  - Yuzu (Nintendo Switch)
+  - Citra (Nintendo 3DS)
+  - melonDS (Nintendo DS)
+  - Xemu (Original Xbox)
+  - PrimeHack (Metroid Prime trilogy)
+- 🔍 **Dynamic Path Detection**: Intelligent save path discovery system with fallback mechanisms
+- 📋 **Advanced Path Management**: New commands for custom save path handling:
+  - `detect <emulator>` - Show detected save paths for specific emulator
+  - `set-path <emulator> <path>` - Set custom save path override
+  - `reset-path <emulator>` - Reset emulator to use auto-detected path
+- �🔄 **Backward Compatibility**: Existing EmuDeck users can continue using old script names via symlinks
 - 📁 **Extensible Path System**: Prepared architecture for platform-specific emulator path configurations
 - 🛠️ **Compatibility Script**: `create-compatibility-links.sh` for seamless transition
+- 🔧 **Enhanced Environment Check**: Improved `check-bazzite-environment.sh` with Homebrew detection
+- 📊 **Centralized Version Management**: Added VERSION file and version display across all scripts
+- 📋 **Per-Emulator Testing Documentation**: Added testing guides for each supported emulator
 
 ### Changed
+- 🔧 **Improved rclone Installation**: Better automatic installation for different Linux distributions
+- 📚 **Enhanced Documentation**: Updated deployment guide with Bazzite-specific setup instructions
+- 🔍 **Better Error Messaging**: More helpful guidance for missing dependencies and setup issues
+- 🎮 **Extended Emulator Detection**: Environment check now detects all 13 supported emulators
+- 📝 **Enhanced List Display**: The `list` command now shows path sources (default/detected/custom)
 - **Script Names** (with backward compatibility):
   - `emudeck-sync.sh` → `emulation-save-sync.sh`
   - `emudeck-setup.sh` → `emulation-save-setup.sh`
@@ -51,46 +80,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prepared extensible architecture for platform-specific features
 - Maintained all existing functionality while adding extensibility layer
 
+### Fixed
+- 🐧 **Bazzite rclone Installation**: Fixed automatic rclone installation on Bazzite systems using Homebrew
+- 📁 **Emulator Path Detection**: Corrected Flatpak paths for various emulators
+- 🔧 **Setup Script Dependencies**: Better handling of missing dependencies during initial setup
+
 ### Migration Notes
 **For Existing EmuDeck Users:**
 1. Run `./create-compatibility-links.sh` to maintain existing script functionality
 2. Old script names will continue to work via symlinks
 3. Configuration will be automatically migrated on first run
 4. No manual changes required to existing Steam launch options or automation
-
-## [1.1.0] - 2025-08-26
-
-### Added
-- 🐧 **Bazzite System Support**: Enhanced detection and support for Bazzite (immutable Fedora-based OS)
-- 🍺 **Homebrew Integration**: Prioritized Homebrew for rclone installation on Bazzite systems  
-- 🎮 **Expanded Emulator Support**: Added support for 13 major emulators:
-  - RetroArch (multi-system retro gaming)
-  - Dolphin (GameCube/Wii)
-  - PCSX2 (PlayStation 2) 
-  - PPSSPP (PlayStation Portable)
-  - DuckStation (PlayStation 1)
-  - RPCS3 (PlayStation 3)
-  - Cemu (Wii U)
-  - Ryujinx (Nintendo Switch)
-  - Yuzu (Nintendo Switch)
-  - Citra (Nintendo 3DS)
-  - melonDS (Nintendo DS)
-  - Xemu (Original Xbox)
-  - PrimeHack (Metroid Prime trilogy)
-- 📋 **Per-Emulator Testing Documentation**: Added testing guides for each supported emulator
-- 🔧 **Enhanced Environment Check**: Improved `check-bazzite-environment.sh` with Homebrew detection
-- 📊 **Centralized Version Management**: Added VERSION file and version display across all scripts
-
-### Changed  
-- 🔧 **Improved rclone Installation**: Better automatic installation for different Linux distributions
-- 📚 **Enhanced Documentation**: Updated deployment guide with Bazzite-specific setup instructions
-- 🔍 **Better Error Messaging**: More helpful guidance for missing dependencies and setup issues
-- 🎮 **Extended Emulator Detection**: Environment check now detects all 13 supported emulators
-
-### Fixed
-- 🐧 **Bazzite rclone Installation**: Fixed automatic rclone installation on Bazzite systems using Homebrew
-- 📁 **Emulator Path Detection**: Corrected Flatpak paths for various emulators
-- 🔧 **Setup Script Dependencies**: Better handling of missing dependencies during initial setup
 
 ## [1.0.0] - 2025-08-25
 
