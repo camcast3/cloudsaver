@@ -60,8 +60,8 @@ fi
 NEW_VERSION="$1"
 
 # Validate version format (basic semantic versioning)
-if ! echo "$NEW_VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-    echo -e "${YELLOW}Warning: Version should follow semantic versioning (e.g., 1.2.3)${NC}"
+if ! echo "$NEW_VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$'; then
+    echo -e "${YELLOW}Warning: Version should follow semantic versioning (e.g., 1.2.3, 1.2.3-beta, 1.2.3-rc1)${NC}"
     read -p "Continue anyway? (y/N): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
