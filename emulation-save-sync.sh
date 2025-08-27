@@ -653,7 +653,11 @@ sync_emulator_saves() {
         return 1
     fi
     
-    local local_path="$LOCAL_SAVES_BASE/${EMULATOR_SAVE_PATHS[$emulator]}"
+    local local_path="$(detect_save_paths "$emulator")"
+    if [ -z "$local_path" ]; then
+        log "ERROR" "Could not detect save path for emulator: $emulator"
+        return 1
+    fi
     local remote_path="$RCLONE_REMOTE:$RCLONE_REMOTE_PATH/$emulator"
     
     # Check if local path exists for upload direction
