@@ -1,6 +1,6 @@
-# EmuDeck Save Sync - Deployment Guide for Bazzite/SteamOS v1.1.0
+# EmuDeck Save Sync - Deployment Guide for Bazzite/SteamOS v1.1.1
 
-This guide covers deployment of EmuDeck Save Sync v1.1.0, which includes enhanced Bazzite support and complete coverage of all major emulators.
+This guide covers deployment of EmuDeck Save Sync v1.1.1, which includes enhanced Bazzite support and complete coverage of all major emulators.
 
 ## 🎯 Pre-Deployment Checklist
 

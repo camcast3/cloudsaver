@@ -78,7 +78,8 @@ chmod +x *.sh
 
 This will check for:
 - ✅ EmuDeck installation
-- ✅ Available emulators
+- ✅ Installed emulator Flatpaks
+- ✅ Existing save directories (created after first emulator run)
 - ✅ System requirements
 
 ### Step 3: Run Setup
@@ -184,7 +185,7 @@ rclone config
 
 ## 🔍 Advanced Path Management
 
-*New in v1.1.0 - Handle saves in custom locations*
+*New in v1.1.0+ - Handle saves in custom locations*
 
 ### Detect Save Paths
 

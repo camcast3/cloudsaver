@@ -5,6 +5,19 @@ All notable changes to the Universal Emulation Save Sync project will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2025-08-27
+
+### Improved
+- 🔍 **Enhanced Environment Detection**: `check-bazzite-environment.sh` now clearly distinguishes between:
+  - **Installed Emulator Flatpaks**: Shows which emulators are available to use
+  - **Existing Save Directories**: Shows which emulators have been run and created save folders
+- 📚 **Clearer Documentation**: Updated user guide to explain environment check output more clearly
+- 🎯 **Better User Experience**: Users now understand why only some emulators show up in the environment check
+
+### Fixed
+- 🔧 **Environment Check Confusion**: Fixed misleading "Available emulators" description that confused users when only RetroArch appeared
+- 📝 **Documentation Clarity**: Improved explanations of what the environment check actually detects
+
 ## [1.1.0] - 2025-08-27
 
 ### 🎯 MAJOR UPDATE: Universal Emulation Platform Support
