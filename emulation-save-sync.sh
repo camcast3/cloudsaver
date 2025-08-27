@@ -648,7 +648,7 @@ sync_emulator_saves() {
     local emulator="$1"
     local direction="$2"  # "download" or "upload"
     
-    if [ -z "${EMULATOR_SAVE_PATHS[$emulator]}" ]; then
+    if [ -z "${EMULATOR_SAVE_PATHS[$emulator]:-}" ] && [ -z "${EMULATOR_ALT_PATHS[$emulator]:-}" ]; then
         log "ERROR" "Unknown emulator: $emulator"
         return 1
     fi
