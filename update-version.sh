@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version Management Script for EmuDeck Save Sync
+# Version Management Script for Universal Emulation Save Sync
 # Usage: ./update-version.sh [new_version]
 
 set -e
@@ -17,7 +17,7 @@ NC='\033[0m'
 
 show_usage() {
     cat << EOF
-EmuDeck Save Sync - Version Management
+Universal Emulation Save Sync - Version Management
 
 Current version: $CURRENT_VERSION
 
@@ -47,9 +47,9 @@ if [ $# -eq 0 ]; then
     echo -e "${BLUE}Current version: ${GREEN}$CURRENT_VERSION${NC}"
     echo
     echo "Files that automatically read from VERSION file:"
-    echo "  • emudeck-sync.sh"
-    echo "  • emudeck-setup.sh"
-    echo "  • emudeck-wrapper.sh"
+    echo "  • emulation-save-sync.sh"
+    echo "  • emulation-save-setup.sh"
+    echo "  • emulation-save-wrapper.sh"
     echo "  • check-bazzite-environment.sh"
     echo "  • run-all-tests.sh"
     echo
@@ -77,18 +77,20 @@ echo -e "${GREEN}✅ Version updated from $CURRENT_VERSION to $NEW_VERSION${NC}"
 echo
 
 echo -e "${BLUE}Scripts that will automatically use the new version:${NC}"
-echo "  • emudeck-sync.sh"
-echo "  • emudeck-setup.sh" 
-echo "  • emudeck-wrapper.sh"
+echo "  • emulation-save-sync.sh"
+echo "  • emulation-save-setup.sh" 
+echo "  • emulation-save-wrapper.sh"
 echo "  • check-bazzite-environment.sh"
 echo "  • run-all-tests.sh"
 echo
 
 echo -e "${YELLOW}📝 Don't forget to:${NC}"
 echo "  1. Update CHANGELOG.md with the new version changes"
-echo "  2. Update README-EmuDeck-Sync.md if needed"
-echo "  3. Test the updated scripts"
-echo "  4. Commit and tag the new version:"
+echo "  2. Update README.md and COMPLETE-USER-GUIDE.md if needed"
+echo "  3. Update any hardcoded version references in scripts"
+echo "  4. Test the updated scripts"
+echo "  5. Run create-compatibility-links.sh for EmuDeck users"
+echo "  6. Commit and tag the new version:"
 echo "     git add ."
 echo "     git commit -m \"Release v$NEW_VERSION\""
 echo "     git tag v$NEW_VERSION"
