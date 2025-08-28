@@ -1,0 +1,62 @@
+{
+  "type": "module",
+  "name": "cloudsaver",
+  "version": "1.0.0",
+  "description": "Universal Emulation Save Sync",
+  "main": "dist/cli/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "start": "node dist/cli/index.js",
+    "dev": "ts-node src/cli/index.ts",
+    "watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/cli/index.ts",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs",
+    "test:simple": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/core/config.simple.test.ts",
+    "test:advanced-sync": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/sync/advanced-sync.test.ts",
+    "test:config": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/core/config.test.ts",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch --config=jest.config.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camcast3/cloudsaver.git"
+  },
+  "keywords": [
+    "emulation",
+    "cloud",
+    "sync",
+    "save"
+  ],
+  "author": "Cameron Carlton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/camcast3/cloudsaver/issues"
+  },
+  "homepage": "https://github.com/camcast3/cloudsaver#readme",
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.9",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
+    "cross-env": "^10.0.0",
+    "jest": "^30.1.1",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^14.0.0",
+    "conf": "^14.0.0",
+    "dotenv": "^17.2.1",
+    "fs-extra": "^11.3.1",
+    "glob": "^11.0.3",
+    "inquirer": "^12.9.4",
+    "winston": "^3.17.0",
+    "zod": "^4.1.4"
+  }
+}
