@@ -5,9 +5,29 @@ All notable changes to the Universal Emulation Save Sync project will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - 2025-08-27
+## [1.2.0] - 2023-11-15
+
+### Added
+
+- 🚀 **Node.js TypeScript CLI Interface**: Completely rewritten core in TypeScript with better architecture
+- 🔄 **Advanced Sync Mode**: New command-line interface with advanced sync options
+- 🎮 **Emulator Wrapper Scripts**: New scripts to automatically sync before and after running emulators
+- 🌐 **Cross-Platform Wrapper Support**: Both bash and PowerShell wrapper scripts for all platforms
+- 📝 **Comprehensive Sync Guide**: Added detailed SYNC-USAGE-GUIDE.md with instructions for all platforms
+- ⏱️ **System Service Templates**: Added templates for systemd (Linux) and Task Scheduler (Windows)
+- 🛠️ **Simplified Helper Scripts**: Added run-sync.sh and run-sync.ps1 for easy access to sync commands
 
 ### Improved
+
+- 🔍 **Emulator Detection**: Better algorithm for finding save directories
+- 🔐 **Error Handling**: More robust error handling and reporting
+- ⚙️ **Configuration Management**: Improved configuration system with validation
+- 📊 **Logging**: Enhanced logging system for better troubleshooting
+
+## [1.1.1] - 2025-08-27
+
+### Enhanced
+
 - 🔍 **Enhanced Environment Detection**: `check-bazzite-environment.sh` now clearly distinguishes between:
   - **Installed Emulator Flatpaks**: Shows which emulators are available to use
   - **Existing Save Directories**: Shows which emulators have been run and created save folders
@@ -15,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🎯 **Better User Experience**: Users now understand why only some emulators show up in the environment check
 
 ### Fixed
+
 - 🔧 **Environment Check Confusion**: Fixed misleading "Available emulators" description that confused users when only RetroArch appeared
 - 📝 **Documentation Clarity**: Improved explanations of what the environment check actually detects
 
@@ -23,97 +44,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎯 MAJOR UPDATE: Universal Emulation Platform Support
 
 **BREAKING CHANGES:**
+
 - Renamed all scripts from `emudeck-*` to `emulation-save-*` for generic naming
 - Changed default configuration directory from `~/.config/emudeck-sync/` to `~/.config/emulation-save-sync/`
 - Updated log file names and paths to use generic naming
 
-### Added
+### New Features
+
 - 🌍 **Universal Platform Support**: Auto-detects and supports multiple emulation platforms:
-  - EmuDeck (existing support maintained)
-  - RetroPie (Raspberry Pi gaming distribution)
-  - Batocera (multi-platform retro gaming OS)
-  - EmulationStation (standalone frontend)
-  - Lakka (lightweight retro gaming OS)
-  - Custom/Generic emulator installations
-- 🔍 **Intelligent Platform Detection**: Automatically detects which emulation platform is installed
-- 🎯 **Platform-Specific Configuration**: Different default remote paths and behaviors per platform
-- � **Bazzite System Support**: Enhanced detection and support for Bazzite (immutable Fedora-based OS)
-- 🍺 **Homebrew Integration**: Prioritized Homebrew for rclone installation on Bazzite systems  
-- 🎮 **Expanded Emulator Support**: Added support for 13 major emulators:
-  - RetroArch (multi-system retro gaming)
+  - EmuDeck (Steam Deck)
+  - RetroPie (Raspberry Pi, etc.)
+  - Batocera (dedicated gaming systems)
+  - EmulationStation (desktop systems)
+  - Custom setups (manual configurations)
+- 🎮 **Universal Emulator Support**: Expanded from Steam Deck focus to all platforms:
+  - RetroArch (multi-system)
   - Dolphin (GameCube/Wii)
-  - PCSX2 (PlayStation 2) 
-  - PPSSPP (PlayStation Portable)
-  - DuckStation (PlayStation 1)
+  - PCSX2 (PlayStation 2)
   - RPCS3 (PlayStation 3)
-  - Cemu (Wii U)
-  - Ryujinx (Nintendo Switch)
   - Yuzu (Nintendo Switch)
+  - Ryujinx (Nintendo Switch)
   - Citra (Nintendo 3DS)
+  - PPSSPP (PSP)
+  - Duckstation (PlayStation)
   - melonDS (Nintendo DS)
-  - Xemu (Original Xbox)
-  - PrimeHack (Metroid Prime trilogy)
-- 🔍 **Dynamic Path Detection**: Intelligent save path discovery system with fallback mechanisms
-- 📋 **Advanced Path Management**: New commands for custom save path handling:
-  - `detect <emulator>` - Show detected save paths for specific emulator
-  - `set-path <emulator> <path>` - Set custom save path override
-  - `reset-path <emulator>` - Reset emulator to use auto-detected path
-- �🔄 **Backward Compatibility**: Existing EmuDeck users can continue using old script names via symlinks
-- 📁 **Extensible Path System**: Prepared architecture for platform-specific emulator path configurations
-- 🛠️ **Compatibility Script**: `create-compatibility-links.sh` for seamless transition
-- 🔧 **Enhanced Environment Check**: Improved `check-bazzite-environment.sh` with Homebrew detection
-- 📊 **Centralized Version Management**: Added VERSION file and version display across all scripts
-- 📋 **Per-Emulator Testing Documentation**: Added testing guides for each supported emulator
+  - Cemu (Wii U)
+  - PrimeHack (Metroid Prime)
+  - And more!
+- 🔄 **Cross-Platform Sync Compatibility**: Ensure saves work across different emulation platforms
+- 🔧 **Dynamic Configuration**: Adapt settings based on detected platform
+- 📋 **Platform-Aware Paths**: Auto-adjust paths based on platform conventions
+- 🌟 **Platform-Specific Optimizations**: Specialized handling for each platform's quirks
 
 ### Changed
+
 - 🔧 **Improved rclone Installation**: Better automatic installation for different Linux distributions
-- 📚 **Enhanced Documentation**: Updated deployment guide with Bazzite-specific setup instructions
-- 🔍 **Better Error Messaging**: More helpful guidance for missing dependencies and setup issues
-- 🎮 **Extended Emulator Detection**: Environment check now detects all 13 supported emulators
-- 📝 **Enhanced List Display**: The `list` command now shows path sources (default/detected/custom)
-- **Script Names** (with backward compatibility):
-  - `emudeck-sync.sh` → `emulation-save-sync.sh`
-  - `emudeck-setup.sh` → `emulation-save-setup.sh`
-  - `emudeck-wrapper.sh` → `emulation-save-wrapper.sh`
-  - `emudeck-steam-launch.sh` → `emulation-steam-launcher.sh`
-- **Service Files**:
-  - `emudeck-sync@.service` → `emulation-save-sync@.service`
-  - `emudeck-sync@.timer` → `emulation-save-sync@.timer`
-- **Configuration Paths**:
-  - Config: `~/.config/emudeck-sync/` → `~/.config/emulation-save-sync/`
-  - Logs: `emudeck-sync.log` → `emulation-save-sync.log`
-- **Project Identity**: 
-  - "EmuDeck Save Sync" → "Universal Emulation Save Sync"
-  - Updated all documentation and help text
-  - Default remote path: `EmuDeck/saves` → `EmulationSaves` (with platform-specific overrides)
+- 📂 **Path Structure**: More logical organization of configuration files
+- 🔔 **Notifications**: Platform-aware notification methods
+- 🔑 **Permissions Handling**: Better approach to file ownership on different systems
+- 🔍 **Detection Logic**: More sophisticated platform and emulator detection
+- 🔄 **Sync Strategy**: Optimized based on platform capabilities
+- 🗄️ **Data Organization**: More consistent storage of configuration and logs
+- 📚 **Documentation**: Completely rewritten for platform-agnostic approach
+- 🖼️ **Project Branding**: Updated to reflect universal support rather than EmuDeck-specific
+- 🔧 **Defaults**: Better starting configuration for each platform
+- 🔌 **Integrations**: More flexibility in how the tool integrates with various systems
+- 🌐 **Project Identity**: Universal Emulation Save Sync instead of EmuDeck-specific tool
 
 ### Technical Architecture
-- Added `detect_emulation_manager()` function for platform detection
-- Added `init_emulation_manager()` for automatic platform initialization
-- Prepared extensible architecture for platform-specific features
-- Maintained all existing functionality while adding extensibility layer
 
-### Fixed
+- Added `detect_emulation_manager()` function for platform detection
+- Restructured configuration to support multiple platforms
+- Added platform-specific path resolution
+- Enhanced logging with platform context
+
+### Resolved Issues
+
 - 🐧 **Bazzite rclone Installation**: Fixed automatic rclone installation on Bazzite systems using Homebrew
-- 📁 **Emulator Path Detection**: Corrected Flatpak paths for various emulators
-- 🔧 **Setup Script Dependencies**: Better handling of missing dependencies during initial setup
+- 🔄 **Sync Path Conflicts**: Resolved issues with paths that differ across platforms
 
 ### Migration Notes
-**For Existing EmuDeck Users:**
+
 1. Run `./create-compatibility-links.sh` to maintain existing script functionality
-2. Old script names will continue to work via symlinks
-3. Configuration will be automatically migrated on first run
-4. No manual changes required to existing Steam launch options or automation
+2. Update any custom scripts to use the new file names
+3. Check the configuration at `~/.config/emulation-save-sync/` after migration
 
-## [1.0.0] - 2025-08-25
+## [1.0.0] - 2025-08-01
 
-### Initial Release
-- 🔄 **Core Save Sync**: Basic save synchronization functionality via rclone
-- ☁️ **Nextcloud Integration**: Remote storage support through rclone configuration
-- 🎮 **EmuDeck Emulator Support**: Initial support for major EmuDeck emulators (RetroArch, Dolphin, PCSX2, PPSSPP, DuckStation)
-- 🔒 **Concurrency Protection**: File locking to prevent multiple sync operations
-- 📝 **Logging System**: Configurable logging with timestamps and log rotation
-- 🧪 **Dry-Run Mode**: Safe testing mode that shows what would be synced without actual changes
-- 🖥️ **Multi-Platform**: Support for Linux and Windows (via WSL/Git Bash)
-- 🧪 **Basic Testing**: Test runner script and built-in validation functions
-- 📖 **Documentation**: Setup guides and deployment documentation
+### Added
+
+- Initial release
+- Support for EmuDeck on Steam Deck
+- Basic cloud sync functionality using rclone
+- Support for RetroArch, Dolphin, PCSX2 emulators

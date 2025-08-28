@@ -12,8 +12,11 @@
     "start": "node dist/cli/index.js",
     "dev": "ts-node src/cli/index.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/cli/index.ts",
-    "test": "jest --config=jest.config.js",
-    "test:watch": "jest --watch --config=jest.config.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs",
+    "test:simple": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/core/config.simple.test.ts",
+    "test:advanced-sync": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/sync/advanced-sync.test.ts",
+    "test:config": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/core/config.test.ts",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch --config=jest.config.cjs"
   },
   "repository": {
     "type": "git",

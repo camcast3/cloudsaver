@@ -8,23 +8,24 @@
 
 ## 🚀 Quick Start
 
-**👉 [Complete User Guide](COMPLETE-USER-GUIDE.md)** - Everything you need from setup to advanced usage
+**👉 [Complete Documentation](CONSOLIDATED-DOCUMENTATION.md)** - Everything you need from setup to advanced usage
 
 **Key Features:**
+
 - ✅ Auto-detects saves even in custom locations
-- ✅ Supports 13+ major emulators 
+- ✅ Supports 13+ major emulators
 - ✅ Multi-platform: EmuDeck, RetroPie, Batocera, EmulationStation
 - ✅ Multiple cloud providers: Nextcloud, Google Drive, OneDrive, Dropbox
 - ✅ Steam Deck & Bazzite optimized
 - ✅ One-command setup
+- ✅ Automatic wrapper scripts for seamless syncing
 
 ---
 
 ## 📚 Documentation
 
-- **[Complete User Guide](COMPLETE-USER-GUIDE.md)** - Start here! Setup, usage, troubleshooting
+- **[Complete Documentation](CONSOLIDATED-DOCUMENTATION.md)** - All documentation in one place
 - **[Changelog](CHANGELOG.md)** - Version history and updates
-- **[Test Suite Documentation](tests/README.md)** - Developer testing information
 
 ---
 
@@ -40,6 +41,14 @@
 
 # See detected emulators and platforms
 ./emulation-save-sync.sh list
+
+# Use the newer CLI interface
+node dist/cli/index.js sync
+node dist/cli/index.js advanced-sync --direction upload
+
+# Use wrapper scripts to automatically sync before and after running an emulator
+./cloudsaver-wrapper.sh retroarch flatpak run org.libretro.RetroArch  # Linux/macOS
+.\cloudsaver-wrapper.ps1 retroarch "C:\RetroArch\retroarch.exe"       # Windows
 ```
 
 ## 🔄 Backward Compatibility

@@ -4,6 +4,7 @@ import { helloCommand } from './commands/hello.js';
 import { detectCommand } from './commands/detect.js';
 import { syncCommand } from './commands/sync.js';
 import { configCommand } from './commands/config.js';
+import { advancedSyncCommand } from './commands/advanced-sync.js';
 
 // Initialize the CLI
 const program = new Command()
@@ -36,6 +37,7 @@ program
 program.addCommand(helloCommand);
 program.addCommand(detectCommand);
 program.addCommand(syncCommand);
+program.addCommand(advancedSyncCommand);
 program.addCommand(configCommand);
 
 // Error handling for the entire program
