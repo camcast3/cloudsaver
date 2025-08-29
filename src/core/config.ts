@@ -3,6 +3,7 @@ import path from 'path';
 import os from 'os';
 import { z } from 'zod'; // Fixed import for zod
 import { logger } from './logger.js';
+import Conf from 'conf';
 
 // Define configuration schema with Zod for validation
 const configSchema = z.object({
@@ -69,10 +70,7 @@ export class ConfigManager {
     }
     
     try {
-      // Dynamically import the Conf module
-      const { default: Conf } = await import('conf');
-      
-      // Initialize configuration
+      // Use static import instead of dynamic import
       this.conf = new Conf({
         projectName: 'cloudsaver',
         defaults: defaultConfig,

@@ -2,9 +2,13 @@ import { jest, describe, it, beforeAll, afterAll, beforeEach, afterEach, expect 
 import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
+import Conf from 'conf';
+import { ConfigManager } from '../../src/core/config.js';
 
 let tmpRoot: string;
 let consoleSpy: jest.SpiedFunction<typeof console.log>;
+let testConf: Conf<any>;
+let configManager: ConfigManager;
 const stripAnsi = (s: string) => s.replace(/\u001b\[[0-9;]*m/g, '');
 
 beforeAll(async () => {
@@ -19,53 +23,58 @@ beforeAll(async () => {
   process.env.HOME = homeDir;           // posix homedir
   process.env.USERPROFILE = homeDir;    // windows homedir
   process.env.XDG_CONFIG_HOME = xdg;    // posix conf location
+  
+  // Create test configuration with the isolated directory
+  testConf = new Conf({
+    projectName: 'cloudsaver',
+    schema: {
+      syncRoot: { type: 'string', default: path.join(homeDir, '.cloudsaver') },
+      logLevel: { type: 'string', default: 'info' },
+      customPaths: { type: 'object', default: {} },
+      emulatorPaths: { type: 'object', default: {} },
+      scanDirs: { type: 'array', default: [], items: { type: 'string' } },
+      ignoreDirs: { type: 'array', default: [], items: { type: 'string' } },
+      autoSync: { type: 'boolean', default: false },
+    }
+  });
 });
 
 afterAll(async () => {
+  ConfigManager.__resetForTests();
   try { await fs.remove(tmpRoot); } catch {}
 });
 
-beforeEach(() => {
+beforeEach(async () => {
   consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  ConfigManager.__setConfForTests(testConf);
+  configManager = await ConfigManager.getInstance();
 });
 
 afterEach(() => {
   consoleSpy.mockRestore();
 });
 
-describe('config command e2e', () => {
-  it('set/get persists values end-to-end', async () => {
-    // Use test seam to control Conf instance
-    const mockConf = {
-      get: jest.fn((key?: string) => {
-        if (key === 'autoSync') return false;
-        if (!key) return { autoSync: false, logLevel: 'info' };
-        return undefined;
-      }),
-      set: jest.fn(),
-      store: { autoSync: false },
-      clear: jest.fn(),
-      path: path.join(tmpRoot, 'config.json'),
-    };
+describe('Config E2E Tests', () => {
+  it('should persist configuration changes', async () => {
+    // Set a value
+    await configManager.set('autoSync', true);
+    expect(configManager.getValue('autoSync')).toBe(true);
 
-    const { ConfigManager } = await import('../../src/core/config.js');
+    // Create new manager instance and verify persistence
     ConfigManager.__resetForTests();
-    ConfigManager.__setConfForTests(mockConf);
+    ConfigManager.__setConfForTests(testConf);
+    const newManager = await ConfigManager.getInstance();
+    expect(newManager.getValue('autoSync')).toBe(true);
+  });
 
-    const { configCommand } = await import('../../src/cli/commands/config.js');
-
-    // Set values (focus on autoSync which is a boolean toggle)
-    consoleSpy.mockClear();
-    await configCommand.parseAsync(['set', 'autoSync', 'true'], { from: 'user' });
-    let out = stripAnsi(consoleSpy.mock.calls.flat().join('\n'));
-    expect(out).toMatch(/Successfully set autoSync/i);
-    expect(mockConf.set).toHaveBeenCalledWith('autoSync', true);
-
-    // Get all - update mock to return new value
-    consoleSpy.mockClear();
-    mockConf.get.mockReturnValue({ autoSync: true, logLevel: 'info' });
-    await configCommand.parseAsync(['get'], { from: 'user' });
-    out = stripAnsi(consoleSpy.mock.calls.flat().join('\n'));
-    expect(out).toContain('autoSync');
+  it('should handle reset operation', async () => {
+    // Set some values
+    await configManager.set('autoSync', true);
+    await configManager.set('logLevel', 'debug');
+    
+    // Reset and verify defaults
+    configManager.reset();
+    expect(configManager.getValue('autoSync')).toBe(false);
+    expect(configManager.getValue('logLevel')).toBe('info');
   });
 });

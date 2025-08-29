@@ -5,6 +5,7 @@ import { detectCommand } from './commands/detect.js';
 import { syncCommand } from './commands/sync.js';
 import { configCommand } from './commands/config.js';
 import { advancedSyncCommand } from './commands/advanced-sync.js';
+import { pathsCommand } from './commands/paths.js';
 
 // Initialize the CLI
 const program = new Command()
@@ -39,6 +40,7 @@ program.addCommand(detectCommand);
 program.addCommand(syncCommand);
 program.addCommand(advancedSyncCommand);
 program.addCommand(configCommand);
+program.addCommand(pathsCommand);
 
 // Error handling for the entire program
 program.exitOverride();

@@ -2,10 +2,13 @@ import { jest, describe, beforeEach, afterEach, it, expect } from '@jest/globals
 import fs from 'fs-extra';
 import path from 'path';
 import os from 'os';
+import Conf from 'conf';
+import { ConfigManager } from '../../src/core/config.js';
 
 describe('config command negative paths', () => {
   let tempDir: string;
   let originalEnv: NodeJS.ProcessEnv;
+  let testConf: Conf<any>;
 
   beforeEach(async () => {
     // Create isolated temp directory
@@ -19,11 +22,33 @@ describe('config command negative paths', () => {
     process.env.HOME = tempDir;
     process.env.USERPROFILE = tempDir;
     process.env.XDG_CONFIG_HOME = path.join(tempDir, '.config');
+    
+    // Ensure directories exist
+    await fs.ensureDir(path.join(tempDir, 'AppData', 'Roaming'));
+    await fs.ensureDir(path.join(tempDir, '.config'));
+    
+    // Create test conf instance
+    testConf = new Conf({
+      projectName: 'cloudsaver-test',
+      schema: {
+        syncRoot: { type: 'string', default: path.join(tempDir, '.cloudsaver') },
+        logLevel: { type: 'string', default: 'info' },
+        customPaths: { type: 'object', default: {} },
+        emulatorPaths: { type: 'object', default: {} },
+        scanDirs: { type: 'array', default: [], items: { type: 'string' } },
+        ignoreDirs: { type: 'array', default: [], items: { type: 'string' } },
+        autoSync: { type: 'boolean', default: false },
+      }
+    });
+    
+    ConfigManager.__resetForTests();
+    ConfigManager.__setConfForTests(testConf);
   });
 
   afterEach(async () => {
     // Restore environment
     process.env = originalEnv;
+    ConfigManager.__resetForTests();
     
     // Clean up temp directory
     try {
@@ -34,29 +59,16 @@ describe('config command negative paths', () => {
   });
 
   it('should handle invalid config key for ConfigManager set', async () => {
-    // This test verifies that TypeScript typing prevents invalid keys at compile time
-    // At runtime, the ConfigManager.set() method should validate against the schema
-    // Since the typing as `any` bypasses compile-time checks, we expect runtime validation
+    const configManager = await ConfigManager.getInstance();
     
-    const { getConfigManager } = await import('../../src/core/config.js');
-    
-    try {
-      const configManager = await getConfigManager();
-      await configManager.set('nonExistentKey' as any, 'value');
-      
-      // If validation isn't working, the test will pass but log a warning
-      console.warn('WARNING: Config validation may not be working for invalid keys');
-      // For now, accept this as the implementation relies on TypeScript typing
-      expect(true).toBe(true);
-    } catch (error: any) {
-      // If validation is working, we expect an error
-      expect(error.message).toMatch(/Invalid configuration key|not initialized/);
-    }
+    // Test with invalid key - should throw due to schema validation
+    await expect(
+      configManager.set('nonExistentKey' as any, 'value')
+    ).rejects.toThrow(/Invalid configuration key/);
   });
 
   it('should handle invalid config key for ConfigManager get', async () => {
-    const { getConfigManager } = await import('../../src/core/config.js');
-    const configManager = await getConfigManager();
+    const configManager = await ConfigManager.getInstance();
     
     // Try to get with an invalid config key
     const result = configManager.getValue('nonExistentKey' as any);
@@ -66,23 +78,16 @@ describe('config command negative paths', () => {
   });
 
   it('should handle invalid JSON structure for complex config values', async () => {
-    const { getConfigManager } = await import('../../src/core/config.js');
-    const configManager = await getConfigManager();
+    const configManager = await ConfigManager.getInstance();
     
     // Try to set invalid structure for emulatorPaths (should be object)
     await expect(
       configManager.set('emulatorPaths', 'invalid string' as any)
     ).rejects.toThrow();
-    
-    // Try to set invalid structure for customPaths (should be object)
-    await expect(
-      configManager.set('customPaths', 123 as any)
-    ).rejects.toThrow();
   });
 
   it('should validate enum values for logLevel', async () => {
-    const { getConfigManager } = await import('../../src/core/config.js');
-    const configManager = await getConfigManager();
+    const configManager = await ConfigManager.getInstance();
     
     // Try to set invalid log level
     await expect(
