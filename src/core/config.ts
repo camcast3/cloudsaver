@@ -33,7 +33,8 @@ const defaultConfig: CloudSaverConfig = {
 };
 
 export class ConfigManager {
-  private static instance: ConfigManager;
+  private static instance: ConfigManager | null = null;
+  private static testConf: any = null; // Test seam for injecting mock conf
   private conf: any;
   private configDir: string;
   
@@ -47,7 +48,26 @@ export class ConfigManager {
     this.initializeConfig();
   }
   
+  // Test-only hooks to override conf instance
+  public static __setConfForTests(confInstance: any): void {
+    ConfigManager.testConf = confInstance;
+    if (ConfigManager.instance) {
+      ConfigManager.instance.conf = confInstance;
+    }
+  }
+  
+  public static __resetForTests(): void {
+    ConfigManager.instance = null as any;
+    ConfigManager.testConf = null;
+  }
+  
   private async initializeConfig() {
+    // If test conf is provided, use it instead
+    if (ConfigManager.testConf) {
+      this.conf = ConfigManager.testConf;
+      return;
+    }
+    
     try {
       // Dynamically import the Conf module
       const { default: Conf } = await import('conf');
@@ -118,6 +138,18 @@ export class ConfigManager {
         logger.warn(`Configuration not initialized yet, can't set ${String(key)}`);
         return;
       }
+      
+      // Check if key exists in schema
+      if (!(key in configSchema.shape)) {
+        const error = new Error(`Invalid configuration key: ${String(key)}`);
+        logger.error(`Invalid config key: ${String(key)}`, error);
+        throw error;
+      }
+      
+      // Validate with Zod schema before setting
+      const partialConfig = { [key]: value } as unknown as Partial<CloudSaverConfig>;
+      const partialSchema = z.object({ [key]: configSchema.shape[key] });
+      partialSchema.parse(partialConfig);
       
       this.conf.set(key, value);
       logger.debug(`Set config value for ${String(key)}`, { [key]: value });
