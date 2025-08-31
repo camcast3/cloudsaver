@@ -1,18 +1,24 @@
 {
   "type": "module",
   "name": "cloudsaver",
-  "version": "1.0.0",
-  "description": "Universal Emulation Save Sync",
+  "version": "1.1.1",
+  "description": "Universal Emulation Save Sync - Zero-dependency standalone executables for comprehensive emulator save synchronization",
   "main": "dist/cli/index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "build": "rimraf dist && tsc",
+    "build:bundle": "npm run build && esbuild dist/cli/index.js --bundle --platform=node --target=node18 --format=cjs --outfile=bundle/index.cjs --external:electron",
+    "build:exe": "npm run build:bundle && pkg bundle/index.cjs --targets=node18-win-x64 --output=bin/cloudsaver.exe",
+    "build:exe:all": "npm run build:bundle && pkg bundle/index.cjs --targets=node18-win-x64,node18-linux-x64,node18-macos-x64 --out-path=./bin && node -e \"const fs=require('fs'); if(fs.existsSync('bin/index-linux')) fs.renameSync('bin/index-linux','bin/cloudsaver-linux'); if(fs.existsSync('bin/index-macos')) fs.renameSync('bin/index-macos','bin/cloudsaver-macos'); if(fs.existsSync('bin/index-win.exe')) fs.renameSync('bin/index-win.exe','bin/cloudsaver-windows.exe');\"",
+    "build:launcher": "npm run build && echo 'Standalone launchers created in bin/ directory'",
+    "start:launcher": ".\\bin\\cloudsaver.ps1",
     "start": "node dist/cli/index.js",
     "dev": "ts-node src/cli/index.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/cli/index.ts",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs",
+    "test:ci": "npm run build && npm run test",
     "test:simple": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/core/config.simple.test.ts",
     "test:advanced-sync": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/sync/advanced-sync.test.ts",
     "test:config": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.cjs tests/unit/core/config.test.ts",
@@ -39,7 +45,10 @@
     "@types/inquirer": "^9.0.9",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
+    "@vercel/ncc": "^0.38.3",
+    "@yao-pkg/pkg": "^6.6.0",
     "cross-env": "^10.0.0",
+    "esbuild": "^0.25.9",
     "jest": "^30.1.1",
     "nodemon": "^3.1.10",
     "rimraf": "^6.0.1",
@@ -58,5 +67,14 @@
     "inquirer": "^12.9.4",
     "winston": "^3.17.0",
     "zod": "^4.1.4"
+  },
+  "pkg": {
+    "scripts": [
+      "dist/**/*.js"
+    ],
+    "assets": [
+      "node_modules/**/*"
+    ],
+    "outputPath": "bin"
   }
 }

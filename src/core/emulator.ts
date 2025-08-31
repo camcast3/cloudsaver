@@ -351,6 +351,502 @@ const emulatorConfigs: Record<string, Omit<Emulator, 'savePaths'> & {
     saveExtensions: ['.bin', '.sav', '.dat'],
     stateExtensions: ['.ppst', '.sav'],
     configPaths: ['~/.config/ppsspp/ppsspp.ini']
+  },
+
+  vita3k: {
+    id: 'vita3k',
+    name: 'Vita3K',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/Vita3K/saves',
+        'D:/Emulation/saves/Vita3K/saves',
+        'C:/Emulation/saves/Vita3K/saves',
+        '~/Emulation/saves/Vita3K/saves'
+      ],
+      retropie: [
+        '~/.config/vita3k/savedata'
+      ],
+      batocera: [
+        '/userdata/saves/vita3k'
+      ],
+      lakka: [
+        '/storage/savefiles/vita3k'
+      ],
+      emulationstation: [
+        '~/.config/vita3k/savedata'
+      ],
+      generic: [
+        '~/.config/vita3k/savedata',
+        '~/Documents/Vita3K/savedata',
+        '~/AppData/Roaming/Vita3K/savedata'
+      ]
+    },
+    saveExtensions: ['.sav', '.dat', '.bin'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.config/vita3k/config.yml']
+  },
+
+  ryujinx: {
+    id: 'ryujinx',
+    name: 'Ryujinx',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/ryujinx/saves',
+        'D:/Emulation/saves/ryujinx/saves',
+        'C:/Emulation/saves/ryujinx/saves',
+        '~/Emulation/saves/ryujinx/saves'
+      ],
+      retropie: [
+        '~/.config/Ryujinx/bis/user/save'
+      ],
+      batocera: [
+        '/userdata/saves/ryujinx'
+      ],
+      lakka: [
+        '/storage/savefiles/ryujinx'
+      ],
+      emulationstation: [
+        '~/.config/Ryujinx/bis/user/save'
+      ],
+      generic: [
+        '~/.config/Ryujinx/bis/user/save',
+        '~/AppData/Roaming/Ryujinx/bis/user/save',
+        '~/Documents/Ryujinx/bis/user/save'
+      ]
+    },
+    saveExtensions: ['.dat', '.bin'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.config/Ryujinx/Config.json']
+  },
+
+  xemu: {
+    id: 'xemu',
+    name: 'xemu',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/xemu/saves',
+        'D:/Emulation/saves/xemu/saves',
+        'C:/Emulation/saves/xemu/saves',
+        '~/Emulation/saves/xemu/saves'
+      ],
+      retropie: [
+        '~/.local/share/xemu/xbox_hdd'
+      ],
+      batocera: [
+        '/userdata/saves/xemu'
+      ],
+      lakka: [
+        '/storage/savefiles/xemu'
+      ],
+      emulationstation: [
+        '~/.local/share/xemu/xbox_hdd'
+      ],
+      generic: [
+        '~/.local/share/xemu/xbox_hdd',
+        '~/AppData/Roaming/xemu/xbox_hdd',
+        '~/Documents/xemu/xbox_hdd'
+      ]
+    },
+    saveExtensions: ['.dat', '.bin', '.sav'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.local/share/xemu/xemu.toml']
+  },
+
+  flycast: {
+    id: 'flycast',
+    name: 'Flycast',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/flycast/saves',
+        'D:/Emulation/saves/flycast/saves',
+        'C:/Emulation/saves/flycast/saves',
+        '~/Emulation/saves/flycast/saves'
+      ],
+      retropie: [
+        '~/.config/flycast/saves'
+      ],
+      batocera: [
+        '/userdata/saves/flycast'
+      ],
+      lakka: [
+        '/storage/savefiles/flycast'
+      ],
+      emulationstation: [
+        '~/.config/flycast/saves'
+      ],
+      generic: [
+        '~/.config/flycast/saves',
+        '~/AppData/Roaming/Flycast/saves',
+        '~/Documents/Flycast/saves'
+      ]
+    },
+    saveExtensions: ['.bin', '.sav', '.dat'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.config/flycast/emu.cfg']
+  },
+
+  melonds: {
+    id: 'melonds',
+    name: 'melonDS',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/melonds/saves',
+        'D:/Emulation/saves/melonds/saves',
+        'C:/Emulation/saves/melonds/saves',
+        '~/Emulation/saves/melonds/saves'
+      ],
+      retropie: [
+        '~/.config/melonDS/saves'
+      ],
+      batocera: [
+        '/userdata/saves/melonds'
+      ],
+      lakka: [
+        '/storage/savefiles/melonds'
+      ],
+      emulationstation: [
+        '~/.config/melonDS/saves'
+      ],
+      generic: [
+        '~/.config/melonDS/saves',
+        '~/AppData/Roaming/melonDS/saves',
+        '~/Documents/melonDS/saves'
+      ]
+    },
+    saveExtensions: ['.sav', '.dsv', '.dat'],
+    stateExtensions: ['.mln'],
+    configPaths: ['~/.config/melonDS/melonDS.ini']
+  },
+
+  lime3ds: {
+    id: 'lime3ds',
+    name: 'Lime3DS',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/lime3ds/saves',
+        'D:/Emulation/saves/lime3ds/saves',
+        'C:/Emulation/saves/lime3ds/saves',
+        '~/Emulation/saves/lime3ds/saves'
+      ],
+      retropie: [
+        '~/.config/lime3ds-emu/sdmc'
+      ],
+      batocera: [
+        '/userdata/saves/lime3ds'
+      ],
+      lakka: [
+        '/storage/savefiles/lime3ds'
+      ],
+      emulationstation: [
+        '~/.config/lime3ds-emu/sdmc'
+      ],
+      generic: [
+        '~/.config/lime3ds-emu/sdmc',
+        '~/AppData/Roaming/Lime3DS/sdmc',
+        '~/Documents/Lime3DS/sdmc'
+      ]
+    },
+    saveExtensions: ['.sav', '.dat', '.bin'],
+    stateExtensions: ['.cst'],
+    configPaths: ['~/.config/lime3ds-emu/qt-config.ini']
+  },
+
+  scummvm: {
+    id: 'scummvm',
+    name: 'ScummVM',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/scummvm/saves',
+        'D:/Emulation/saves/scummvm/saves',
+        'C:/Emulation/saves/scummvm/saves',
+        '~/Emulation/saves/scummvm/saves'
+      ],
+      retropie: [
+        '~/.config/scummvm/saves'
+      ],
+      batocera: [
+        '/userdata/saves/scummvm'
+      ],
+      lakka: [
+        '/storage/savefiles/scummvm'
+      ],
+      emulationstation: [
+        '~/.config/scummvm/saves'
+      ],
+      generic: [
+        '~/.config/scummvm/saves',
+        '~/AppData/Roaming/ScummVM/saves',
+        '~/Documents/ScummVM/saves'
+      ]
+    },
+    saveExtensions: ['.sav', '.s01', '.s02', '.s03', '.s04', '.s05'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.scummvmrc']
+  },
+
+  xenia: {
+    id: 'xenia',
+    name: 'Xenia',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/xenia/saves',
+        'D:/Emulation/saves/xenia/saves',
+        'C:/Emulation/saves/xenia/saves',
+        '~/Emulation/saves/xenia/saves'
+      ],
+      retropie: [
+        '~/.local/share/xenia/content'
+      ],
+      batocera: [
+        '/userdata/saves/xenia'
+      ],
+      lakka: [
+        '/storage/savefiles/xenia'
+      ],
+      emulationstation: [
+        '~/.local/share/xenia/content'
+      ],
+      generic: [
+        '~/.local/share/xenia/content',
+        '~/AppData/Local/Xenia/content',
+        '~/Documents/Xenia/content'
+      ]
+    },
+    saveExtensions: ['.dat', '.bin', '.sav'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.local/share/xenia/xenia.config.toml']
+  },
+
+  azahar: {
+    id: 'azahar',
+    name: 'Azahar',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/azahar/saves',
+        'D:/Emulation/saves/azahar/saves',
+        'C:/Emulation/saves/azahar/saves',
+        '~/Emulation/saves/azahar/saves'
+      ],
+      retropie: [
+        '~/.config/azahar/saves'
+      ],
+      batocera: [
+        '/userdata/saves/azahar'
+      ],
+      lakka: [
+        '/storage/savefiles/azahar'
+      ],
+      emulationstation: [
+        '~/.config/azahar/saves'
+      ],
+      generic: [
+        '~/.config/azahar/saves',
+        '~/AppData/Roaming/Azahar/saves',
+        '~/Documents/Azahar/saves'
+      ]
+    },
+    saveExtensions: ['.sav', '.dat', '.bin'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.config/azahar/config.yml']
+  },
+
+  supermodel: {
+    id: 'supermodel',
+    name: 'Supermodel',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/supermodel/saves',
+        'D:/Emulation/saves/supermodel/saves',
+        'C:/Emulation/saves/supermodel/saves',
+        '~/Emulation/saves/supermodel/saves'
+      ],
+      retropie: [
+        '~/.config/supermodel/saves'
+      ],
+      batocera: [
+        '/userdata/saves/supermodel'
+      ],
+      lakka: [
+        '/storage/savefiles/supermodel'
+      ],
+      emulationstation: [
+        '~/.config/supermodel/saves'
+      ],
+      generic: [
+        '~/.config/supermodel/saves',
+        '~/AppData/Roaming/Supermodel/saves',
+        '~/Documents/Supermodel/saves'
+      ]
+    },
+    saveExtensions: ['.bin', '.sav', '.dat'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.config/supermodel/supermodel.ini']
+  },
+
+  shadps4: {
+    id: 'shadps4',
+    name: 'ShadPS4',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/shadps4/saves',
+        'D:/Emulation/saves/shadps4/saves',
+        'C:/Emulation/saves/shadps4/saves',
+        '~/Emulation/saves/shadps4/saves'
+      ],
+      retropie: [
+        '~/.config/shadPS4/saves'
+      ],
+      batocera: [
+        '/userdata/saves/shadps4'
+      ],
+      lakka: [
+        '/storage/savefiles/shadps4'
+      ],
+      emulationstation: [
+        '~/.config/shadPS4/saves'
+      ],
+      generic: [
+        '~/.config/shadPS4/saves',
+        '~/AppData/Roaming/shadPS4/saves',
+        '~/Documents/shadPS4/saves'
+      ]
+    },
+    saveExtensions: ['.bin', '.sav', '.dat'],
+    stateExtensions: ['.state'],
+    configPaths: ['~/.config/shadPS4/config.toml']
+  },
+
+  mgba: {
+    id: 'mgba',
+    name: 'mGBA',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/mgba/saves',
+        'D:/Emulation/saves/mgba/saves', 
+        'C:/Emulation/saves/mgba/saves',
+        '~/Emulation/saves/mgba/saves'
+      ],
+      retropie: [
+        '~/.config/mgba/saves'
+      ],
+      batocera: [
+        '/userdata/saves/mgba'
+      ],
+      lakka: [
+        '/storage/savefiles/mgba'
+      ],
+      emulationstation: [
+        '~/.config/mgba/saves'
+      ],
+      generic: [
+        '~/.config/mgba/saves',
+        '~/AppData/Roaming/mGBA/saves',
+        '~/Documents/mGBA/saves'
+      ]
+    },
+    saveExtensions: ['.sav', '.sa1', '.sa2', '.sa3'],
+    stateExtensions: ['.ss1', '.ss2', '.ss3', '.ss4', '.ss5', '.ss6', '.ss7', '.ss8', '.ss9'],
+    configPaths: ['~/.config/mgba/config.ini']
+  },
+
+  epsxe: {
+    id: 'epsxe',
+    name: 'ePSXe',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/epsxe/saves',
+        'D:/Emulation/saves/epsxe/saves',
+        'C:/Emulation/saves/epsxe/saves',
+        '~/Emulation/saves/epsxe/saves'
+      ],
+      retropie: [
+        '~/.epsxe/memcards'
+      ],
+      batocera: [
+        '/userdata/saves/epsxe'
+      ],
+      lakka: [
+        '/storage/savefiles/epsxe'
+      ],
+      emulationstation: [
+        '~/.epsxe/memcards'
+      ],
+      generic: [
+        '~/.epsxe/memcards',
+        '~/AppData/Roaming/ePSXe/memcards',
+        '~/Documents/ePSXe/memcards'
+      ]
+    },
+    saveExtensions: ['.mcr', '.mc', '.gme', '.mem'],
+    stateExtensions: ['.sts'],
+    configPaths: ['~/.epsxe/config']
+  },
+
+  mednafen: {
+    id: 'mednafen',
+    name: 'Mednafen',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/mednafen/saves',
+        'D:/Emulation/saves/mednafen/saves',
+        'C:/Emulation/saves/mednafen/saves',
+        '~/Emulation/saves/mednafen/saves'
+      ],
+      retropie: [
+        '~/.mednafen/sav'
+      ],
+      batocera: [
+        '/userdata/saves/mednafen'
+      ],
+      lakka: [
+        '/storage/savefiles/mednafen'
+      ],
+      emulationstation: [
+        '~/.mednafen/sav'
+      ],
+      generic: [
+        '~/.mednafen/sav',
+        '~/AppData/Roaming/Mednafen/sav',
+        '~/Documents/Mednafen/sav'
+      ]
+    },
+    saveExtensions: ['.sav', '.mcr', '.mc'],
+    stateExtensions: ['.mca', '.mcb', '.mcc'],
+    configPaths: ['~/.mednafen/mednafen.cfg']
+  },
+
+  mame: {
+    id: 'mame',
+    name: 'MAME',
+    defaultPaths: {
+      emudeck: [
+        'E:/Emulation/saves/mame/saves',
+        'D:/Emulation/saves/mame/saves',
+        'C:/Emulation/saves/mame/saves',
+        '~/Emulation/saves/mame/saves'
+      ],
+      retropie: [
+        '~/.mame/nvram',
+        '~/RetroPie/roms/arcade/mame2003-plus/hi'
+      ],
+      batocera: [
+        '/userdata/saves/mame'
+      ],
+      lakka: [
+        '/storage/savefiles/mame'
+      ],
+      emulationstation: [
+        '~/.mame/nvram'
+      ],
+      generic: [
+        '~/.mame/nvram',
+        '~/AppData/Roaming/MAME/nvram',
+        '~/Documents/MAME/nvram'
+      ]
+    },
+    saveExtensions: ['.nv', '.hi', '.cfg'],
+    stateExtensions: ['.sta'],
+    configPaths: ['~/.mame/mame.ini']
   }
 };
 

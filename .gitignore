@@ -23,3 +23,6 @@ Thumbs.db
 # npm
 *.tgz
 .npm
+coverage/lcov.info
+coverage/lcov-report/*
+bin/*

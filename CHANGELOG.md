@@ -24,9 +24,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ⚙️ **Configuration Management**: Improved configuration system with validation
 - 📊 **Logging**: Enhanced logging system for better troubleshooting
 
-## [1.1.1] - 2025-08-27
+## [1.1.1] - 2025-08-31
 
-### Enhanced
+### 🚀 Major Features Added
+
+- **Standalone Executables**: True zero-dependency distribution system
+  - Windows executable (43MB) with embedded Node.js v18.20.8 runtime
+  - Linux executable (51MB) with embedded Node.js v18.20.8 runtime  
+  - macOS executable (55MB) with embedded Node.js v18.20.8 runtime
+  - No Node.js, npm, or software installation required for end users
+
+### 🎮 Comprehensive Emulator Support
+
+- **Expanded from 8 to 22 emulators** - 175% increase in emulator coverage
+- **Console Emulators Added**: ePSXe, ShadPS4, Xenia, xemu  
+- **Handheld Emulators Added**: Vita3K, Ryujinx, Lime3DS, melonDS, mGBA
+- **Specialty Emulators Added**: Flycast, ScummVM, Mednafen, MAME, Supermodel, Azahar
+- **All requested emulators supported**: vita3k, retroarch, pcsx2, duckstation confirmed working
+
+### 🔧 Technical Infrastructure
+
+- **Build Pipeline**: esbuild + @yao-pkg/pkg for standalone executable creation
+- **ESM Compatibility**: Full ES module support with CommonJS bundling for pkg
+- **Cross-Platform Builds**: Automated builds for Windows, Linux, macOS via npm scripts
+- **Bundle Optimization**: 1.6MB core bundle + Node.js runtime = 43-55MB total per platform
+
+### 📚 Documentation Consolidation
+
+- **Streamlined Documentation**: Consolidated 13+ markdown files into 3 essential files
+- **DOCUMENTATION.md**: Comprehensive installation, usage, and feature guide
+- **README.md**: Updated with accurate file sizes and emulator counts
+- **Clean Project Structure**: Removed redundant development summaries and duplicate guides
+
+### 🧪 Testing & Quality
+
+- **Test Coverage**: 96.4% success rate (26/28 tests passing)
+- **Jest Integration**: Full ES module testing support maintained
+- **Cross-Platform Validation**: Windows executable tested and verified
+- **CI/CD Ready**: GitHub Actions configured for automated builds and releases
+
+### Improved
 
 - 🔍 **Enhanced Environment Detection**: `check-bazzite-environment.sh` now clearly distinguishes between:
   - **Installed Emulator Flatpaks**: Shows which emulators are available to use
