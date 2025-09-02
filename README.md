@@ -8,38 +8,83 @@
 
 ## 🚀 Quick Start
 
-**👉 [Complete User Guide](COMPLETE-USER-GUIDE.md)** - Everything you need from setup to advanced usage
+**� Download standalone executables (no installation required):**
+
+### Windows
+```powershell
+# Download cloudsaver-windows.exe (43MB) from releases
+.\cloudsaver-windows.exe --help
+.\cloudsaver-windows.exe detect --platform emudeck
+```
+
+### Linux
+```bash  
+# Download cloudsaver-linux (51MB) from releases
+chmod +x cloudsaver-linux
+./cloudsaver-linux --help
+./cloudsaver-linux detect --platform emudeck
+```
+
+### macOS
+```bash
+# Download cloudsaver-macos (55MB) from releases
+chmod +x cloudsaver-macos  
+./cloudsaver-macos --help
+./cloudsaver-macos detect --platform emudeck
+```
+
+**📥 [Download Latest Release](https://github.com/camcast3/cloudsaver/releases)**
 
 **Key Features:**
-- ✅ Auto-detects saves even in custom locations
-- ✅ Supports 13+ major emulators 
+
+- ✅ **No installation required** - Standalone executables (43-55MB each)
+- ✅ Auto-detects saves even in custom locations  
+- ✅ Supports 22+ major emulators
 - ✅ Multi-platform: EmuDeck, RetroPie, Batocera, EmulationStation
 - ✅ Multiple cloud providers: Nextcloud, Google Drive, OneDrive, Dropbox
 - ✅ Steam Deck & Bazzite optimized
 - ✅ One-command setup
+- ✅ Cross-platform compatibility
 
 ---
 
 ## 📚 Documentation
 
-- **[Complete User Guide](COMPLETE-USER-GUIDE.md)** - Start here! Setup, usage, troubleshooting
+- **[Complete Documentation](DOCUMENTATION.md)** - Comprehensive guide with installation, usage, and configuration
 - **[Changelog](CHANGELOG.md)** - Version history and updates
-- **[Test Suite Documentation](tests/README.md)** - Developer testing information
 
 ---
 
 ## ⚡ Basic Usage
 
+### Standalone Executables (Recommended)
 ```bash
-# One-time setup (auto-detects your emulation platform)
-./emulation-save-setup.sh
+# Detect your emulation setup
+./cloudsaver-linux detect --platform emudeck
 
-# Daily usage
-./emulation-save-sync.sh download    # Before gaming
-./emulation-save-sync.sh upload      # After gaming
+# Configure cloud provider  
+./cloudsaver-linux config set cloudProvider "your-rclone-remote"
 
-# See detected emulators and platforms
-./emulation-save-sync.sh list
+# Sync saves
+./cloudsaver-linux sync --upload     # Upload saves to cloud
+./cloudsaver-linux sync --download   # Download saves from cloud
+
+# Advanced features
+./cloudsaver-linux advanced-sync --emulator dolphin --direction upload
+./cloudsaver-linux paths list        # Manage custom emulator paths
+```
+
+### For Developers (requires Node.js)
+```bash
+# Modern CLI interface (TypeScript-based)
+npx tsx src/cli/index.ts detect      # Auto-detect emulators and platforms
+npx tsx src/cli/index.ts config get  # View current configuration
+npx tsx src/cli/index.ts sync        # Sync all detected saves
+npx tsx src/cli/index.ts paths list  # Manage custom emulator paths
+
+# Advanced sync operations
+npx tsx src/cli/index.ts advanced-sync --emulator dolphin --direction upload
+npx tsx src/cli/index.ts advanced-sync --emulator all --direction download
 ```
 
 ## 🔄 Backward Compatibility
@@ -48,4 +93,4 @@
 
 ---
 
-*For detailed instructions, troubleshooting, and advanced features, see the [Complete User Guide](COMPLETE-USER-GUIDE.md)*
+*For detailed instructions, troubleshooting, and advanced features, see the [Sync Usage Guide](SYNC-USAGE-GUIDE.md)*
