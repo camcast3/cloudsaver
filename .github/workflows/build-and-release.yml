@@ -111,6 +111,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout code
@@ -130,7 +132,20 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         echo "TAG_NAME=v$VERSION" >> $GITHUB_OUTPUT
     
+    - name: Check if release already exists
+      id: check_release
+      run: |
+        TAG_NAME=v${{ steps.version.outputs.VERSION }}
+        if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME$"; then
+          echo "Release $TAG_NAME already exists, skipping..."
+          echo "should_release=false" >> $GITHUB_OUTPUT
+        else
+          echo "Release $TAG_NAME does not exist, proceeding..."
+          echo "should_release=true" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Create release packages
+      if: steps.check_release.outputs.should_release == 'true'
       run: |
         # Create Windows release
         mkdir -p release-windows
@@ -155,13 +170,11 @@ jobs:
         fi
     
     - name: Create GitHub Release
-      uses: actions/create-release@v1
-      id: create_release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: steps.check_release.outputs.should_release == 'true'
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.version.outputs.TAG_NAME }}
-        release_name: CloudSaver ${{ steps.version.outputs.TAG_NAME }}
+        name: CloudSaver ${{ steps.version.outputs.TAG_NAME }}
         body: |
           # CloudSaver ${{ steps.version.outputs.TAG_NAME }}
           
@@ -184,36 +197,9 @@ jobs:
           CloudSaver supports 22+ emulators including RetroArch, Dolphin, PCSX2, RPCS3, Yuzu, Vita3K, and many more.
           
           See [DOCUMENTATION.md](https://github.com/camcast3/cloudsaver/blob/main/DOCUMENTATION.md) for complete usage instructions.
+        files: |
+          cloudsaver-windows-v${{ steps.version.outputs.VERSION }}.zip
+          cloudsaver-linux-v${{ steps.version.outputs.VERSION }}.tar.gz
+          cloudsaver-macos-v${{ steps.version.outputs.VERSION }}.tar.gz
         draft: false
         prerelease: false
-    
-    - name: Upload Windows Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./cloudsaver-windows-v${{ steps.version.outputs.VERSION }}.zip
-        asset_name: cloudsaver-windows-v${{ steps.version.outputs.VERSION }}.zip
-        asset_content_type: application/zip
-    
-    - name: Upload Linux Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./cloudsaver-linux-v${{ steps.version.outputs.VERSION }}.tar.gz
-        asset_name: cloudsaver-linux-v${{ steps.version.outputs.VERSION }}.tar.gz
-        asset_content_type: application/gzip
-    
-    - name: Upload macOS Release Asset
-      if: hashFiles('cloudsaver-macos-v${{ steps.version.outputs.VERSION }}.tar.gz') != ''
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./cloudsaver-macos-v${{ steps.version.outputs.VERSION }}.tar.gz
-        asset_name: cloudsaver-macos-v${{ steps.version.outputs.VERSION }}.tar.gz
-        asset_content_type: application/gzip
